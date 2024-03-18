@@ -1,7 +1,12 @@
 import { useEffect } from "react";
 import "./App.css";
+import { name } from "ejs";
 
 function App() {
+  var validName1 = false;
+  var validEmail = false;
+  var validContact = false;
+  var validPassword = false;
   useEffect(() => {
     const name1 = document.getElementById("name1");
     const email = document.getElementById("email");
@@ -12,7 +17,7 @@ function App() {
     email.addEventListener("blur", handleClick2);
     password.addEventListener("blur", handleClick3);
     phone.addEventListener("blur", handleClick4);
-    submit.addEventListener("click",handleClick5)
+    submit.addEventListener("click", handleClick5);
   }, []);
 
   // for name
@@ -24,8 +29,10 @@ function App() {
     if (regex.test(str)) {
       console.log("name is valid");
       name1.classList.remove("is-invalid");
+      validName1=true
     } else {
       name1.classList.add("is-invalid");
+      validName1=false;
     }
   };
 
@@ -38,9 +45,11 @@ function App() {
     if (regex.test(str)) {
       console.log("email is valid");
       email.classList.remove("is-invalid");
+      validEmail=true;
     } else {
       console.log("not valid");
       email.classList.add("is-invalid");
+      validEmail=false;
     }
   };
 
@@ -52,8 +61,10 @@ function App() {
     console.log(regex, str);
     if (regex.test(str)) {
       password.classList.remove("is-invalid");
+      validPassword=true
     } else {
       password.classList.add("is-invalid");
+      validPassword=false;
     }
   };
 
@@ -65,26 +76,51 @@ function App() {
     console.log(regex, str);
     if (regex.test(str)) {
       phone.classList.remove("is-invalid");
+      validContact=true;
     } else {
       phone.classList.add("is-invalid");
+      validContact=false;
     }
   };
 
-  const handleClick5 = (e) =>{
+  const handleClick5 = (e) => {
     e.preventDefault();
-    console.log("submit is clicked");
-    let success = document.getElementById("success");
-    success.classList.add("show");
-  }
+
+    if (validEmail && validName1 && validContact && validPassword) {
+      console.log("submit is clicked");
+      console.log("submitting form");
+      let success = document.getElementById("success");
+      success.classList.add("show");
+      failure.classList.remove("show")
+    } else {
+      console.log("section is missing");
+      let failure = document.getElementById("failure");
+      failure.classList.add("show");
+      success.classList.remove("show");
+    }
+  };
   return (
     <>
       <div className="container">
         <div
-        id="success"
-          class="alert alert-warning alert-dismissible fade mt-2"
+          id="success"
+          class="alert alert-success alert-dismissible fade mt-2"
           role="alert"
         >
           <strong>form Submitted!</strong>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="alert"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div
+          id="failure"
+          class="alert alert-danger alert-dismissible fade mt-2"
+          role="alert"
+        >
+          <strong>Section is missing!</strong>
           <button
             type="button"
             class="btn-close"
